@@ -1,6 +1,19 @@
-# ElectronAngular
+# Electron Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+[![Angular Logo](./logo-angular.jpg)](https://angular.io/)
+[![Electron Logo](./logo-electron.jpg)](https://electron.atom.io/)
+
+Currently runs with:
+
+- [Angular CLI](https://github.com/angular/angular-cli) v6.0.8
+- [Electron](https://github.com/electron/electron/tree/v2.0.5) v2.0.5
+- [Electron Builder](https://github.com/electron-userland/electron-builder/tree/v20.25.0) v20.25.0
+
+With this sample, you can :
+
+- Run your app in a local development environment with Electron & Hot reload
+- Run your app in a production environment
+- Package your app into an executable file for Linux, Windows & Mac
 
 ## Development server
 
