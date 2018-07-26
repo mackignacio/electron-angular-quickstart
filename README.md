@@ -1,7 +1,7 @@
 # Electron Angular
 
 [![Angular Logo](./logo-angular.jpg)](https://angular.io/)
-[![Electron Logo](./logo-electron.jpg)](https://electron.atom.io/)
+[![Electron Logo](https://electronjs.org/images/electron-logo.svg)](https://electron.atom.io/)
 
 Currently runs with:
 
