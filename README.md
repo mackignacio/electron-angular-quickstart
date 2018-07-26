@@ -1,6 +1,6 @@
 # Electron Angular
 
-[![Angular Logo](http://www.stickpng.com/assets/images/5847ea22cef1014c0b5e4833.png)](https://angular.io/)
+[![Angular Logo](https://cdn.colorlib.com/wp/wp-content/uploads/sites/2/angular-logo.png)](https://angular.io/)
 [![Electron Logo](https://electronjs.org/images/electron-logo.svg)](https://electron.atom.io/)
 
 Currently runs with:
