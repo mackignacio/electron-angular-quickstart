@@ -4,7 +4,7 @@
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "npm run electron:start",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
