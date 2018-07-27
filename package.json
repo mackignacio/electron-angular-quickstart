@@ -14,7 +14,8 @@
     "electron:serve": "wait-on ./dist/electron-angular/index.html && npm run electron:watch",
     "ng:build": "ng build --base-href ./ --watch=true",
     "electron:tsc": "tsc -w main.ts ",
-    "electron:watch": "concurrently --kill-others \"npm run electron:tsc \"  \"electron . --serve\""
+    "electron:run": "wait-on main.js && electron . --serve",
+    "electron:watch": "concurrently --kill-others \"npm run electron:tsc \"  \"npm run electron:run\""
   },
   "private": true,
   "dependencies": {
