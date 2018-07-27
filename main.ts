@@ -7,10 +7,10 @@ class ElectronMain {
   args: any;
   serve: boolean;
   mainWindow: BrowserWindow;
-  
+
   constructor() {
     this.initApp();
-    this.initializeAppEvents();
+    this.initAppEvents();
     this.initIpc();
   }
   
@@ -19,7 +19,7 @@ class ElectronMain {
     this.disableSecurityWarnings();
   }
   
-  initializeAppEvents() {
+  initAppEvents() {
     app.on("ready", () => this.createMainWindow());
     app.on("window-all-closed", () => this.quitAppOnNonDarwin());
     app.on("activate", () => this.createDefaultWindow());
