@@ -3,51 +3,18 @@ import * as path from "path";
 import * as url from "url";
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
-require("electron-reload")(__dirname, {
-  electron: require(`${__dirname}/node_modules/electron`)
-});
-let win;
-function createWindow() {
-  win = new BrowserWindow({ width: 800, height: 600 });
-  win.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "/dist/electron-angular/index.html"),
-      protocol: "file:",
-      slashes: true
-    })
-  );
-  win.webContents.openDevTools();
-  win.on("closed", () => {
-    app.quit();
-  });
-}
-
-app.on("ready", createWindow);
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
-
-app.on("activate", () => {
-  if (win === null) {
-    createWindow();
-  }
-});
 class ElectronMain {
+  appTitle = "Electron Angular Quickstart";
   args: any;
   serve: boolean;
   mainWindow: BrowserWindow;
 
   constructor() {
-    app.on("ready", this.createMainWindow);
-    require("electron-reload")(__dirname, {
-      electron: require(`${__dirname}/node_modules/electron`)
-    });
+    this.checkElectronArgs();
     this.initApp();
     this.initIpc();
   }
+
   checkElectronArgs() {
     this.args = process.argv.slice(1);
     this.serve = this.args.some(val => val === "--serve");
@@ -60,8 +27,13 @@ class ElectronMain {
 
   createMainWindow() {
     this.mainWindow = new BrowserWindow({
-      x: 0,
-      y: 0
+      title: this.appTitle,
+      fullscreen: true,
+      minimizable: false,
+      maximizable: false,
+      autoHideMenuBar: true,
+      alwaysOnTop: true,
+      closable: false
     });
     this.mainWindow.loadURL(
       url.format({
@@ -94,4 +66,4 @@ class ElectronMain {
   initIpc() {}
 }
 
-// export default new ElectronMain();
+export default new ElectronMain();
