@@ -9,10 +9,11 @@ import { ElectronService } from "./services/electron.service";
 
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./components/home/home.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
-  imports: [AppRoutingModule, HttpClientModule, BrowserModule],
+  imports: [AppRoutingModule, HttpClientModule, BrowserModule, BrowserAnimationsModule],
   providers: [ElectronService],
   bootstrap: [AppComponent]
 })
