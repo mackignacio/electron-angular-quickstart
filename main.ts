@@ -3,6 +3,7 @@ import * as path from "path";
 import * as url from "url";
 
 class ElectronMain {
+  appTitle = "Electron Angular Quickstart";
   args: any;
   serve: boolean;
   mainWindow: BrowserWindow;
@@ -51,8 +52,13 @@ class ElectronMain {
 
   createBrowserWindow(): BrowserWindow {
     return new BrowserWindow({
-      x: 0,
-      y: 0
+     title: this.appTitle,
+      fullscreen: true,
+      minimizable: false,
+      maximizable: false,
+      autoHideMenuBar: true,
+      alwaysOnTop: true,
+      closable: false
     });
   }
 
