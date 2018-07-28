@@ -54,9 +54,8 @@ ng update @angular/cli && ng update @angular/core && ng update @angular/material
 
 - If you had installed a previous version of `Angular CLI`.
 
-```bash or cmd
-  Please follow [Angular Update Guide](https://update.angular.io/).
-```
+    Please follow [Angular Update Guide](https://update.angular.io/).
+
 
 ## Development
 
@@ -72,7 +71,7 @@ Developing with this package make it easy because its enable you to change your 
 
 ### Released Versions
 
-- Latest Version : [v1.2.0](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.2.0)
+- Latest Version : [v1.2.1](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.2.1)
 - Stable Version : [v1.2.0](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.2.0)
 
 ### Other Stable Versions
