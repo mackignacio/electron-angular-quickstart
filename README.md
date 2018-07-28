@@ -72,9 +72,10 @@ Developing with this package make it easy because its enable you to change your 
 
 ### Released Versions
 
-- Latest Version : [v1.1.3](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.1.3)
-- Stable Version : [v1.1.0](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.1.0)
+- Latest Version : [v1.2.0](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.2.0)
+- Stable Version : [v1.2.0](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.2.0)
 
-### Other Versions
+### Other Stable Versions
 
+- [v1.1.0](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.1.0)
 - [v1.0.0](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.0.0)
