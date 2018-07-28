@@ -5,8 +5,8 @@ import * as url from "url";
 class ElectronMain {
   appTitle = "Electron Angular Quickstart";
   args: any;
-  serve: boolean;
   mainWindow: BrowserWindow;
+  secondWindow: BrowserWindow;
 
   constructor() {
     this.initApp();
@@ -15,64 +15,84 @@ class ElectronMain {
   }
 
   initApp() {
-    this.checkElectronArgs();
+    this.enableHotReload(this.checkElectronArgs());
     this.disableSecurityWarnings();
   }
 
   initAppEvents() {
-    app.on("ready", () => this.createMainWindow());
+    app.on("ready", () => this.createWindows());
     app.on("window-all-closed", () => this.quitAppOnNonDarwin());
-    app.on("activate", () => this.createDefaultWindow());
+    app.on("activate", () => this.createDefaultWindows());
   }
 
   initIpc() {
     ipcMain.on("event", (e, data) => this.ipcEventHandler(e, data));
   }
 
-  checkElectronArgs() {
+  checkElectronArgs(): boolean {
     this.args = process.argv.slice(1);
-    this.serve = this.args.some(val => val === "--serve");
-    this.enableHotReload();
+    return this.args.some(val => val === "--serve");
   }
 
-  enableHotReload() {
-    /* if (this.serve) { */
-    require("electron-reload")(__dirname, {
-      electron: require(`${__dirname}/node_modules/electron`)
-    });
-    /* } */
+  enableHotReload(serve: boolean) {
+    if (serve) {
+      require("electron-reload")(__dirname, {
+        electron: require(`${__dirname}/node_modules/electron`)
+      });
+    }
+  }
+
+  createWindows() {
+    this.createMainWindow();
+    this.createSecondWindow();
   }
 
   createMainWindow() {
     this.mainWindow = this.createBrowserWindow();
     this.loadFromFile(this.mainWindow);
-    this.openWindowDevTools(this.mainWindow);
+    this.enableDevTools(this.mainWindow);
     this.onWindowClosed(this.mainWindow);
   }
 
-  createBrowserWindow(): BrowserWindow {
+  createSecondWindow() {
+    const secondDisplay = <any>screen.getAllDisplays()[1];
+    if (this.checkSecondDisplay(secondDisplay)) {
+      this.secondWindow = this.createBrowserWindow(secondDisplay.bounds.x, secondDisplay.bounds.y);
+    }
+    this.loadFromFile(this.secondWindow, "/second-window");
+    this.enableDevTools(this.secondWindow);
+    this.onWindowClosed(this.secondWindow);
+  }
+
+  checkSecondDisplay(secondDisplay: any): boolean {
+    return secondDisplay && secondDisplay !== undefined && secondDisplay !== null;
+  }
+
+  createBrowserWindow(x = 0, y = 0): BrowserWindow {
     return new BrowserWindow({
       title: this.appTitle,
       fullscreen: true,
       minimizable: false,
       maximizable: false,
       autoHideMenuBar: true,
-      alwaysOnTop: true,
-      closable: false
+      closable: false,
+      x: x,
+      y: y
     });
   }
 
-  loadFromFile(window: BrowserWindow) {
+  loadFromFile(window: BrowserWindow, routePath: string = "/") {
     window.loadURL(
       url.format({
         pathname: path.join(__dirname, "/dist/electron-angular/index.html"),
         protocol: "file:",
-        slashes: true
+        slashes: true,
+        hash: routePath
       })
     );
   }
 
-  openWindowDevTools(window: BrowserWindow) {
+  enableDevTools(window: BrowserWindow) {
     window.webContents.openDevTools();
   }
 
@@ -80,9 +100,13 @@ class ElectronMain {
     window.on("closed", () => app.quit());
   }
 
-  createDefaultWindow() {
+  createDefaultWindows() {
     if (null === this.mainWindow) {
       this.createMainWindow();
+    }
+
+    if (this.secondWindow === null) {
+      this.createSecondWindow();
     }
   }
 
