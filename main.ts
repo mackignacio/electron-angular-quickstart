@@ -36,11 +36,11 @@ class ElectronMain {
   }
 
   enableHotReload() {
-    if (this.serve) {
-      require("electron-reload")(__dirname, {
-        electron: require(`${__dirname}/node_modules/electron`)
-      });
-    }
+    /* if (this.serve) { */
+    require("electron-reload")(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
+    /* } */
   }
 
   createMainWindow() {
@@ -62,8 +62,8 @@ class ElectronMain {
     });
   }
 
-  loadFromFile(electronWindow: BrowserWindow) {
-    electronWindow.loadURL(
+  loadFromFile(window: BrowserWindow) {
+    window.loadURL(
       url.format({
         pathname: path.join(__dirname, "/dist/electron-angular/index.html"),
         protocol: "file:",
@@ -72,12 +72,12 @@ class ElectronMain {
     );
   }
 
-  openWindowDevTools(electronWindow: BrowserWindow) {
-    electronWindow.webContents.openDevTools();
+  openWindowDevTools(window: BrowserWindow) {
+    window.webContents.openDevTools();
   }
 
-  onWindowClosed(electronWindow: BrowserWindow) {
-    electronWindow.on("closed", () => app.quit());
+  onWindowClosed(window: BrowserWindow) {
+    window.on("closed", () => app.quit());
   }
 
   createDefaultWindow() {
