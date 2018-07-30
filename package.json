@@ -12,7 +12,7 @@
     "electron:start": "npm-run-all -p ng:clean ng:build electron:serve",
     "ng:clean": "rimraf dist && rimraf main.js",
     "electron:serve": "wait-on ./dist/electron-angular/index.html && npm run electron:watch",
-    "ng:build": "ng build --watch=true",
+    "ng:build": "ng build --base-href='' --watch=true",
     "electron:tsc": "tsc -w main.ts ",
     "electron:run": "wait-on main.js && electron . --serve",
     "electron:exit": "taskkill /IM electron.exe /F",
