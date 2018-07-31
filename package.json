@@ -23,7 +23,6 @@
     "@angular/animations": "^6.0.3",
     "@angular/cdk": "^6.2.0",
     "@angular/material": "^6.4.1",
-    "concurrently": "^3.6.1",
     "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
@@ -45,6 +44,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.2.1",
+    "concurrently": "^3.6.1",
     "electron": "^2.0.5",
     "electron-builder": "^20.25.0",
     "electron-reload": "^1.2.5",
