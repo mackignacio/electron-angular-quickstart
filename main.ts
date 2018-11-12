@@ -13,6 +13,9 @@ class ElectronMain {
     this.initApp();
     this.initAppEvents();
     this.initIpc();
+    this.execFile("")
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
   }
 
   initApp() {
@@ -129,11 +132,11 @@ class ElectronMain {
     return new Promise((resolve, reject) => {
       execFile(pathUrl, (err, data) => {
         if (err) {
-          reject();
+          reject(err);
         }
 
         if (data) {
-          resolve();
+          resolve(data);
         }
       });
     });
