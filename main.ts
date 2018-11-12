@@ -1,6 +1,7 @@
 import { app, ipcMain, ipcRenderer, BrowserWindow, screen } from "electron";
 import * as path from "path";
 import * as url from "url";
+import { execFile } from "child_process";
 
 class ElectronMain {
   appTitle = "Electron Angular Quickstart";
@@ -37,7 +38,7 @@ class ElectronMain {
   enableHotReload(serve: boolean) {
     if (serve) {
       require("electron-reload")(__dirname, {
-        electron: require(`${__dirname}/node_modules/electron`)
+        electron: require(`${__dirname}/node_modules/electron`),
       });
     }
   }
@@ -77,7 +78,7 @@ class ElectronMain {
       autoHideMenuBar: true,
       closable: false,
       x: x,
-      y: y
+      y: y,
     });
   }
 
@@ -87,7 +88,7 @@ class ElectronMain {
         pathname: path.join(__dirname, "/dist/electron-angular/index.html"),
         protocol: "file:",
         slashes: true,
-        hash: routePath
+        hash: routePath,
       })
     );
   }
@@ -122,6 +123,20 @@ class ElectronMain {
 
   disableSecurityWarnings() {
     process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+  }
+
+  execFile(pathUrl: string) {
+    return new Promise((resolve, reject) => {
+      execFile(pathUrl, (err, data) => {
+        if (err) {
+          reject();
+        }
+
+        if (data) {
+          resolve();
+        }
+      });
+    });
   }
 }
 
