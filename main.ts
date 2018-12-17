@@ -15,7 +15,7 @@ class ElectronMain {
     this.initIpc();
     this.execFile("")
       .then(data => console.log(data))
-      .catch(err => console.log(err));
+      .catch(err => console.log("EXEC_FILE_ERROR:", err));
   }
 
   initApp() {
@@ -101,7 +101,12 @@ class ElectronMain {
   }
 
   onWindowClosed(window: BrowserWindow) {
-    window.on("closed", () => app.quit());
+    window.on("closed", () => {
+      this.mainWindow = null;
+      this.secondWindow = null;
+      app.quit();
+      app.exit();
+    });
   }
 
   createDefaultWindows() {
@@ -128,18 +133,21 @@ class ElectronMain {
     process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
   }
 
-  execFile(pathUrl: string) {
-    return new Promise((resolve, reject) => {
-      execFile(pathUrl, (err, data) => {
-        if (err) {
-          reject(err);
-        }
+  execFile(pathUrl?: string) {
+    if (pathUrl) {
+      return new Promise((resolve, reject) => {
+        execFile(pathUrl, (err, data) => {
+          if (err) {
+            reject(err);
+          }
 
-        if (data) {
-          resolve(data);
-        }
+          if (data) {
+            resolve(data);
+          }
+        });
       });
-    });
+    }
+    return Promise.reject("No path provided!");
   }
 }
 
