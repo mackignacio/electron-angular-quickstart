@@ -1,6 +1,6 @@
 {
   "name": "electron-angular-quickstart",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
@@ -21,7 +21,7 @@
   },
   "build": {
     "asar": true,
-    "productName": "Electron Angular Quickstart 1.2.1",
+    "productName": "Electron Angular Quickstart 1.2.2",
     "appId": "com.electron.electron-angular-quickstart",
     "copyright": "Mark Anthony Ignacio",
     "publish": {
@@ -44,7 +44,7 @@
       "createStartMenuShortcut": true,
       "installerIcon": "./src/assets/images/icon.ico",
       "uninstallerIcon": "./src/assets/images/icon.ico",
-      "uninstallDisplayName": "Electron Angular Quickstart 1.2.1"
+      "uninstallDisplayName": "Electron Angular Quickstart 1.2.2"
     },
     "win": {
       "target": [
@@ -73,8 +73,8 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^7.1.3",
-    "@angular/cdk": "^6.2.0",
-    "@angular/material": "^6.4.1",
+    "@angular/cdk": "^7.1.1",
+    "@angular/material": "^7.1.1",
     "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
     "tslib": "^1.9.0",

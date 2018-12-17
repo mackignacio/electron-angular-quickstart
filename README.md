@@ -1,18 +1,19 @@
 # Electron Angular Quickstart
 
 [![Angular Logo](https://cdn.colorlib.com/wp/wp-content/uploads/sites/2/angular-logo.png)](https://angular.io/)
+
 [![Electron Logo](https://electronjs.org/images/electron-logo.svg)](https://electron.atom.io/)
 
 This is a project for creating your first electron desktop app. You can use this to easily setup your basic electron + angular project files for your development.
 
 Currently runs with:
 
-- [Angular CLI](https://github.com/angular/angular-cli) v6.1.0
-- [Angular Material](https://github.com/angular/angular-cli) v6.2.0
-- [Electron](https://github.com/electron/electron/tree/v2.0.5) v2.0.5
+- [Angular CLI](https://github.com/angular/angular-cli) v7.1.3
+- [Angular Material](https://github.com/angular/angular-cli) v7.1.1
+- [Electron](https://github.com/electron/electron/tree/v2.0.5) v3.0.8
 - [Electron Builder](https://github.com/electron-userland/electron-builder/tree/v20.25.0) v20.25.0
 - [Electron Reload](https://github.com/yan-foto/electron-reload) v1.2.5
-- [TypeScript](https://github.com/Microsoft/TypeScript) v2.7.2
+- [TypeScript](https://github.com/Microsoft/TypeScript) v3.1.6
 
 With this sample, you can :
 
@@ -54,8 +55,7 @@ ng update @angular/cli && ng update @angular/core && ng update @angular/material
 
 - If you had installed a previous version of `Angular CLI`.
 
-    Please follow [Angular Update Guide](https://update.angular.io/).
-
+  Please follow [Angular Update Guide](https://update.angular.io/).
 
 ## Development
 
@@ -71,7 +71,7 @@ Developing with this package make it easy because its enable you to change your 
 
 ### Released Versions
 
-- Latest Version : [v1.2.1](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.2.1)
+- Latest Version : [v1.2.2](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.2.2)
 - Stable Version : [v1.2.0](https://github.com/Mackignacio/electron-angular-quickstart/tree/v1.2.0)
 
 ### Other Stable Versions
