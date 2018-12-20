@@ -48,7 +48,7 @@ class ElectronMain {
 
   createWindows() {
     this.createMainWindow();
-    this.createSecondWindow();
+    this.createSecondWindow(); // Creates second window.
   }
 
   createMainWindow() {
