@@ -4,24 +4,21 @@ import * as url from "url";
 import { execFile } from "child_process";
 
 class ElectronWindow {
-  public window;
+  public window: any;
   title = "Electron Angular";
-  path = "/dist/electron-angular/index.html";
+
   constructor(private model: IWindowModel) {
     if (this.checkSecondDisplay(model.display)) {
       this.window = this.createBrowserWindow(model.display.bounds.x, model.display.bounds.y);
-      this.loadFromFile(model.URL);
+      this.loadFromFile(model.URL, "/dist/electron-angular/index.html");
     }
 
     if (model.isDev) {
       this.window.webContents.openDevTools();
-    } else {
-      const consoler = process.env.ELECTRON_CONSOLE;
-      if (typeof consoler !== "undefined") {
-        if (JSON.parse(consoler)) {
-          this.window.webContents.openDevTools();
-        }
-      }
+    }
+
+    if (model.console) {
+      this.window.webContents.openDevTools();
     }
 
     this.window.on("closed", model.onClosed);
@@ -46,13 +43,13 @@ class ElectronWindow {
     });
   }
 
-  private loadFromFile(routePath: string) {
+  private loadFromFile(hash: string, path_url: string) {
     this.window.loadURL(
       url.format({
-        pathname: path.join(__dirname, this.path),
+        pathname: path.join(__dirname, path_url),
         protocol: "file:",
         slashes: true,
-        hash: routePath,
+        hash,
       })
     );
   }
@@ -63,16 +60,17 @@ class ElectronMain {
   args: any;
   mainWindow: BrowserWindow;
   secondWindow: BrowserWindow;
-  dev: any;
+  development = false;
+  console = false;
 
   constructor() {
-    this.dev = process.env.ELECTRON === "development";
+    this.development = process.env.ELECTRON === "development";
     this.initIpc();
     this.initApp();
     this.initAppEvents();
-    /*  this.execFile("")
+    this.execFile("")
       .then(data => console.log(data))
-      .catch(err => console.log("EXEC_FILE_ERROR:", err)); */
+      .catch(err => console.log("EXEC_FILE_ERROR:", err));
   }
 
   initApp() {
@@ -95,16 +93,22 @@ class ElectronMain {
   }
 
   checkElectronArgs() {
-    console.log(process.argv);
+    if (process.argv.indexOf("--console") !== -1) {
+      this.console = true;
+    }
+    if (process.argv.indexOf("--development") !== -1) {
+      this.development = true;
+    }
 
-    this.args = process.argv.slice(1);
-    this.enableHotReload(this.args.some(val => val === "--serve"));
+    if (process.argv.indexOf("--serve") !== -1) {
+      this.enableHotReload(true);
+    }
   }
 
   enableHotReload(serve: boolean) {
     if (serve) {
       require("electron-reload")(__dirname, {
-        electron: require(`${__dirname}/node_modules/electron`),
+        electron: path.join(__dirname, "node_modules/.bin/electron.cmd"),
       });
     }
   }
@@ -127,12 +131,13 @@ class ElectronMain {
     this.secondWindow = new ElectronWindow(this.getDisplayModel(display, "/second-window")).window;
   }
 
-  getDisplayModel(display: number, URL: string = "/") {
+  getDisplayModel(display: number, URL: string = "/"): IWindowModel {
     return {
       display,
-      isDev: this.dev,
+      isDev: this.development,
       onClosed: this.onWindowClosed,
       URL,
+      console: this.console,
     };
   }
 
@@ -190,6 +195,7 @@ interface IWindowModel {
   isDev: boolean;
   URL: string;
   onClosed: Function;
+  console: boolean;
 }
 
 export default new ElectronMain();
