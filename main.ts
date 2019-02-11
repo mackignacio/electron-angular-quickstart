@@ -3,6 +3,59 @@ import * as path from "path";
 import * as url from "url";
 import { execFile } from "child_process";
 
+class ElectronWindow {
+  public window;
+  constructor(private model: IWindowModel) {
+    if (this.checkSecondDisplay(model.display)) {
+      this.window = this.createBrowserWindow(model.display.bounds.x, model.display.bounds.y);
+      this.loadFromFile(model.URL);
+    }
+
+    if (model.isDev) {
+      this.window.webContents.openDevTools();
+    } else {
+      const consoler = process.env.RACKET_CONSOLE;
+      if (typeof consoler !== "undefined") {
+        if (JSON.parse(consoler)) {
+          this.window.webContents.openDevTools();
+        }
+      }
+    }
+
+    this.window.on("closed", model.onClosed);
+  }
+
+  private checkSecondDisplay(secondDisplay: any): boolean {
+    return secondDisplay && secondDisplay !== undefined && secondDisplay !== null;
+  }
+
+  private createBrowserWindow(x: number = 0, y: number = 0): BrowserWindow {
+    return new BrowserWindow({
+      title: "Racket Studios",
+      fullscreen: true,
+      minimizable: false,
+      maximizable: false,
+      autoHideMenuBar: true,
+      alwaysOnTop: !this.model.isDev,
+      closable: false,
+      show: true,
+      x: x,
+      y: y,
+    });
+  }
+
+  private loadFromFile(routePath: string) {
+    this.window.loadURL(
+      url.format({
+        pathname: path.join(__dirname, "/dist/racket-kiosk/index.html"),
+        protocol: "file:",
+        slashes: true,
+        hash: routePath,
+      })
+    );
+  }
+}
+
 class ElectronMain {
   appTitle = "Electron Angular Quickstart";
   args: any;
@@ -149,6 +202,13 @@ class ElectronMain {
     }
     return Promise.reject("No path provided!");
   }
+}
+
+interface IWindowModel {
+  display: any;
+  isDev: boolean;
+  URL: string;
+  onClosed: Function;
 }
 
 export default new ElectronMain();
