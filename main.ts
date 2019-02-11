@@ -101,9 +101,7 @@ class ElectronMain {
     }
 
     if (process.argv.indexOf("--serve") !== -1) {
-      require("electron-reload")(__dirname, {
-        electron: path.join(__dirname, "node_modules/.bin/electron.cmd"),
-      });
+      require("electron-reload")(__dirname, { electron: path.join(__dirname, "node_modules/.bin/electron.cmd") });
     }
   }
 
