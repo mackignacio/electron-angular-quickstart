@@ -101,12 +101,6 @@ class ElectronMain {
     }
 
     if (process.argv.indexOf("--serve") !== -1) {
-      this.enableHotReload(true);
-    }
-  }
-
-  enableHotReload(serve: boolean) {
-    if (serve) {
       require("electron-reload")(__dirname, {
         electron: path.join(__dirname, "node_modules/.bin/electron.cmd"),
       });
