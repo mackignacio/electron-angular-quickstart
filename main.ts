@@ -5,6 +5,8 @@ import { execFile } from "child_process";
 
 class ElectronWindow {
   public window;
+  title = "Electron Angular";
+  path = "/dist/electron-angular/index.html";
   constructor(private model: IWindowModel) {
     if (this.checkSecondDisplay(model.display)) {
       this.window = this.createBrowserWindow(model.display.bounds.x, model.display.bounds.y);
@@ -14,7 +16,7 @@ class ElectronWindow {
     if (model.isDev) {
       this.window.webContents.openDevTools();
     } else {
-      const consoler = process.env.RACKET_CONSOLE;
+      const consoler = process.env.ELECTRON_CONSOLE;
       if (typeof consoler !== "undefined") {
         if (JSON.parse(consoler)) {
           this.window.webContents.openDevTools();
@@ -31,7 +33,7 @@ class ElectronWindow {
 
   private createBrowserWindow(x: number = 0, y: number = 0): BrowserWindow {
     return new BrowserWindow({
-      title: "Racket Studios",
+      title: this.title,
       fullscreen: true,
       minimizable: false,
       maximizable: false,
@@ -47,7 +49,7 @@ class ElectronWindow {
   private loadFromFile(routePath: string) {
     this.window.loadURL(
       url.format({
-        pathname: path.join(__dirname, "/dist/racket-kiosk/index.html"),
+        pathname: path.join(__dirname, this.path),
         protocol: "file:",
         slashes: true,
         hash: routePath,
@@ -61,18 +63,20 @@ class ElectronMain {
   args: any;
   mainWindow: BrowserWindow;
   secondWindow: BrowserWindow;
+  dev: any;
 
   constructor() {
+    this.dev = process.env.ELECTRON === "development";
+    this.initIpc();
     this.initApp();
     this.initAppEvents();
-    this.initIpc();
-    this.execFile("")
+    /*  this.execFile("")
       .then(data => console.log(data))
-      .catch(err => console.log("EXEC_FILE_ERROR:", err));
+      .catch(err => console.log("EXEC_FILE_ERROR:", err)); */
   }
 
   initApp() {
-    this.enableHotReload(this.checkElectronArgs());
+    this.checkElectronArgs();
     this.disableSecurityWarnings();
   }
 
@@ -83,12 +87,18 @@ class ElectronMain {
   }
 
   initIpc() {
-    ipcMain.on("event", (e, data) => this.ipcEventHandler(e, data));
+    this.setIpcMainMonitor();
   }
 
-  checkElectronArgs(): boolean {
+  setIpcMainMonitor() {
+    ipcMain.on("get-version", (e: any) => e.sender.send("version", process.env.npm_package_version));
+  }
+
+  checkElectronArgs() {
+    console.log(process.argv);
+
     this.args = process.argv.slice(1);
-    return this.args.some(val => val === "--serve");
+    this.enableHotReload(this.args.some(val => val === "--serve"));
   }
 
   enableHotReload(serve: boolean) {
@@ -100,75 +110,50 @@ class ElectronMain {
   }
 
   createWindows() {
-    this.createMainWindow();
-    this.createSecondWindow(); // Creates second window.
-  }
-
-  createMainWindow() {
-    this.mainWindow = this.createBrowserWindow();
-    this.loadFromFile(this.mainWindow);
-    this.enableDevTools(this.mainWindow);
-    this.onWindowClosed(this.mainWindow);
-  }
-
-  createSecondWindow() {
-    const secondDisplay = <any>screen.getAllDisplays()[1];
-    if (this.checkSecondDisplay(secondDisplay)) {
-      this.secondWindow = this.createBrowserWindow(secondDisplay.bounds.x, secondDisplay.bounds.y);
+    const displays = <any>screen.getAllDisplays();
+    if (displays[1] !== undefined) {
+      this.secondMonitor(displays[0]);
+      this.mainMonitor(displays[1]);
+    } else {
+      this.mainMonitor(displays[0]);
     }
-    this.loadFromFile(this.secondWindow, "/second-window");
-    this.enableDevTools(this.secondWindow);
-    this.onWindowClosed(this.secondWindow);
   }
 
-  checkSecondDisplay(secondDisplay: any): boolean {
-    return secondDisplay && secondDisplay !== undefined && secondDisplay !== null;
+  mainMonitor(display: any) {
+    this.mainWindow = new ElectronWindow(this.getDisplayModel(display)).window;
   }
 
-  createBrowserWindow(x = 0, y = 0): BrowserWindow {
-    return new BrowserWindow({
-      title: this.appTitle,
-      fullscreen: true,
-      minimizable: false,
-      maximizable: false,
-      autoHideMenuBar: true,
-      closable: false,
-      x: x,
-      y: y,
-    });
+  secondMonitor(display: any) {
+    this.secondWindow = new ElectronWindow(this.getDisplayModel(display, "/second-window")).window;
   }
 
-  loadFromFile(window: BrowserWindow, routePath: string = "/") {
-    window.loadURL(
-      url.format({
-        pathname: path.join(__dirname, "/dist/electron-angular/index.html"),
-        protocol: "file:",
-        slashes: true,
-        hash: routePath,
-      })
-    );
-  }
-
-  enableDevTools(window: BrowserWindow) {
-    window.webContents.openDevTools();
+  getDisplayModel(display: number, URL: string = "/") {
+    return {
+      display,
+      isDev: this.dev,
+      onClosed: this.onWindowClosed,
+      URL,
+    };
   }
 
   onWindowClosed(window: BrowserWindow) {
-    window.on("closed", () => {
-      this.mainWindow = null;
-      this.secondWindow = null;
-      app.quit();
-      app.exit();
-    });
+    this.mainWindow = null;
+    this.secondWindow = null;
+    app.quit();
+    app.exit();
   }
 
   createDefaultWindows() {
-    if (null === this.mainWindow) {
-      this.createMainWindow();
-    }
-
-    if (this.secondWindow === null) {
-      this.createSecondWindow();
+    const displays = <any>screen.getAllDisplays();
+    if (this.mainWindow === null) {
+      if (displays[1] !== undefined) {
+        this.mainMonitor(displays[1]);
+        if (this.secondWindow === null) {
+          this.secondMonitor(displays[0]);
+        }
+      } else {
+        this.mainMonitor(displays[0]);
+      }
     }
   }
 
@@ -176,10 +161,6 @@ class ElectronMain {
     if (process.platform !== "darwin") {
       app.quit();
     }
-  }
-
-  ipcEventHandler(e: any, data: any) {
-    console.log("[EVENT]:", "recieved from main process");
   }
 
   disableSecurityWarnings() {
