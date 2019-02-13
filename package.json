@@ -15,7 +15,7 @@
     "electron:serve": "wait-on ./dist/electron-angular/index.html && npm run electron:watch",
     "ng:build": "ng build --watch=true --poll 1000 ",
     "electron:tsc": "tsc -w main.ts --lib es2015,es2016,es2017,esnext,dom",
-    "electron:run": "wait-on main.js && electron . --serve --console",
+    "electron:run": "wait-on main.js && electron . --serve --console --development",
     "electron:exit": "taskkill /IM electron.exe /F",
     "electron:watch": "concurrently --kill-others \"npm run electron:tsc \"  \"npm run electron:run\""
   },
